@@ -1,5 +1,6 @@
 <template>
   <div>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
     <div class="container">
       <div class="row">
         <div class="col-sm-6 offset-sm-3">
@@ -9,10 +10,7 @@
             <thead>
               <tr>
                 <th colspan="3">
-                  <button
-                    type="button"
-                    class="btn btn-info btn-block"
-                  >{{ resultado }} {{ operacao }}</button>
+                    <button type="button" class="btn btn-info btn-block">&#8203; {{ display }}</button>
                 </th>
                 <th colspan="1">
                   <button type="button" class="btn btn-info btn-block" @click="limpar">
@@ -38,45 +36,45 @@
               </tr>
               <tr>
                 <td>
-                  <button type="button" class="btn btn-light btn-block" @click="n7">7</button>
+                  <button type="button" class="btn btn-light btn-block" @click="n(7)">7</button>
                 </td>
                 <td>
-                  <button type="button" class="btn btn-light btn-block" @click="n8">8</button>
+                  <button type="button" class="btn btn-light btn-block" @click="n(8)">8</button>
                 </td>
                 <td>
-                  <button type="button" class="btn btn-light btn-block" @click="n9">9</button>
+                  <button type="button" class="btn btn-light btn-block" @click="n(9)">9</button>
                 </td>
                 <td rowspan="4">
-                  <button type="button" class="btn btn-success btn-block btn-block-height">
+                  <button type="button" class="btn btn-success btn-block btn-block-height" @click="calcular">
                     <i class="fas fa-check"></i>
                   </button>
                 </td>
               </tr>
               <tr>
                 <td>
-                  <button type="button" class="btn btn-light btn-block" @click="n4">4</button>
+                  <button type="button" class="btn btn-light btn-block" @click="n(4)">4</button>
                 </td>
                 <td>
-                  <button type="button" class="btn btn-light btn-block" @click="n5">5</button>
+                  <button type="button" class="btn btn-light btn-block" @click="n(5)">5</button>
                 </td>
                 <td>
-                  <button type="button" class="btn btn-light btn-block" @click="n6">6</button>
+                  <button type="button" class="btn btn-light btn-block" @click="n(6)">6</button>
                 </td>
               </tr>
               <tr>
                 <td>
-                  <button type="button" class="btn btn-light btn-block" @click="n1">1</button>
+                  <button type="button" class="btn btn-light btn-block" @click="n(1)">1</button>
                 </td>
                 <td>
-                  <button type="button" class="btn btn-light btn-block" @click="n2">2</button>
+                  <button type="button" class="btn btn-light btn-block" @click="n(2)">2</button>
                 </td>
                 <td>
-                  <button type="button" class="btn btn-light btn-block" @click="n3">3</button>
+                  <button type="button" class="btn btn-light btn-block" @click="n(3)">3</button>
                 </td>
               </tr>
               <tr>
                 <td colspan="2">
-                  <button type="button" class="btn btn-light btn-block" @click="n0">0</button>
+                  <button type="button" class="btn btn-light btn-block" @click="n(0)">0</button>
                 </td>
                 <td>
                   <button type="button" class="btn btn-light btn-block">,</button>
@@ -84,7 +82,6 @@
               </tr>
             </tbody>
           </table>
-          <b-button type="button" variant="primary">SOU UM BOTÃO</b-button>
         </div>
       </div>
     </div>
@@ -97,45 +94,35 @@ export default {
       resultado: 0,
       nb1: "",
       nb2: "",
-      operacao: ""
+      operacao: "",
+      animated: true,
     };
   },
 
   methods: {
     limpar() {
       this.resultado = 0;
+      this.nb1 = "";
+      this.nb2 = "";
       this.operacao = "";
-    },
+    },  
 
-    n0() {
-      this.resultado = 0;
-    },
-    n1() {
-      this.resultado = 1;
-    },
-    n2() {
-      this.resultado = 2;
-    },
-    n3() {
-      this.resultado = 3;
-    },
-    n4() {
-      this.resultado = 4;
-    },
-    n5() {
-      this.resultado = 5;
-    },
-    n6() {
-      this.resultado = 6;
-    },
-    n7() {
-      this.resultado = 7;
-    },
-    n8() {
-      this.resultado = 8;
-    },
-    n9() {
-      this.resultado = 9;
+    n(numero){
+      if(this.operacao == "") {
+        if(this.nb1 == "") {
+          this.nb1 = numero;
+        } else {
+          var numberStringN1 = `${this.nb1}${numero}`
+          this.nb1 = numberStringN1;
+        }
+      } else {
+        if(this.nb2 == "") {
+          this.nb2 = numero;
+        } else {
+          var numberStringN2 = `${this.nb2}${numero}`
+          this.nb2 = numberStringN2;
+        }
+      } 
     },
 
     somar() {
@@ -149,6 +136,26 @@ export default {
     },
     dividir() {
       this.operacao = "/";
+    },
+
+    calcular() {
+      let calculo = this.nb1 + this.operacao + this.nb2;
+      this.resultado = eval(calculo);
+      this.nb1 = this.resultado;
+      this.nb2 = "";
+      this.operacao = "";
+    }
+  },
+
+  computed: {
+    display: function() {
+      let display;
+      if(this.nb1 != "") {
+        display = this.nb1 + " " + this.operacao + " " + this.nb2;
+      } else {
+        display = this.resultado;
+      }
+      return display;
     }
   }
 };
